@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="visualizer.css" rel="stylesheet">
+    <title>Debugger AR Visualization</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Debugger AR Visualization</h1>
+        <form id="debugger-form">
+            <label for="code-editor">Enter Python Code:</label>
+            <div id="code-editor" style="height: 300px; width: 100%;"></div>
+            <button type="button" onclick="visualizeCode()">Visualize</button>
+        </form>
+    </div>
+    <script>
+        var editor = ace.edit("code-editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/python");
+
+        function visualizeCode() {
+            var code = editor.getValue();
+            console.log(code); 
+        }
+    </script>
+</body>
+</html>
