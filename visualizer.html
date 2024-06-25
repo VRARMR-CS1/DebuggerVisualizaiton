@@ -1,38 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>EDITOR</title>
-    <style type="text/css" media="screen">
-        #editor { 
-            position: absolute;
-            top: 10%;
-            right: 0;
-            bottom: 40%;
-            left: 0;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="visualizer.css" rel="stylesheet">
+    <title>Debugger AR Visualization</title>
+    <script src="ace.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Debugger AR Visualization</h1>
+        <form id="debugger-form">
+            <label for="code-editor">Enter Python Code:</label>
+            <div id="code-editor" style="height: 300px; width: 100%;"></div>
+            <button type="button" onclick="visualizeCode()">Visualize</button>
+        </form>
+    </div>
+    <script>
+        var editor = ace.edit("code-editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/python");
+
+        function visualizeCode() {
+            var code = editor.getValue();
+            console.log(code); 
         }
-        #buttonContainer {
-            position: absolute;
-            bottom: 30%;
-            width: 100%;
-        }
-    </style>
-    </head>
-    <body>
-        <header>
-            <h1>AR Python Visualizer</h1>
-            <p>Enter your code below to be visualized.</p>
-        </header>
-<div id="editor">
-    def coder(items):
-        x = "Write your Python Code here"
-        return x
-</div>
-        <div id="buttonContainer">
-            <button style="background-color: rgb(238, 223, 148); border: 1px solid black; border-radius: 8px; padding: 5px 8px;">Visualize</button>
-        </div>
-        <script src=ace.js type="text/javascript" charset="utf-8"></script>
-        <script>
-            var editor = ace.edit("editor");
-            editor.setTheme("ace/theme/dawn");
-            editor.session.setMode("ace/mode/python");
-        </script>
-    </body>
-    
+    </script>
+</body>
+</html>
