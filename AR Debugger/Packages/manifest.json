@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.unity.scripting.python": "6.0.1",
     "com.unity.xr.arfoundation": "5.1.5",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
