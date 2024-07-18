@@ -1,0 +1,25 @@
+{
+  "name": "browser",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "devStart": "node server.js",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.2",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.5.1"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5",
+    "nodemon": "^3.1.4",
+    "tailwindcss": "^3.4.4"
+  },
+  "description": ""
+}
