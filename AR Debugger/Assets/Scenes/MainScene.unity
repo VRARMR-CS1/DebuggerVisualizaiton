@@ -1156,7 +1156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -1573,12 +1573,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 246a6b7ceada849c8b758f260dd17e87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  variableCubePrefab: {fileID: 2231863048394520310, guid: 9a477fb2a9ce04722abbb93228ebd7e9, type: 3}
-  assignPrefab: {fileID: 4049399938907982155, guid: 14b66105bf35e46aebc2ecf9190884ab, type: 3}
-  ifPrefab: {fileID: 3311962404997835531, guid: 96e5bacafca604c7794607accd9f593a, type: 3}
-  callPrefab: {fileID: 2198603600990670906, guid: f395023c846ae49528df847cace3d087, type: 3}
-  constantPrefab: {fileID: 4544145062212279024, guid: e05cf928fd1814eb7ad56cf8419c73eb, type: 3}
-  binOpPrefab: {fileID: 4120326234857662020, guid: ea98abc1269fb40c9a851c2a7057a5a3, type: 3}
 --- !u!1 &690243817
 GameObject:
   m_ObjectHideFlags: 0
@@ -2155,7 +2149,7 @@ MonoBehaviour:
   m_InputType: 0
   m_AsteriskChar: 42
   m_KeyboardType: 0
-  m_LineType: 0
+  m_LineType: 2
   m_HideMobileInput: 0
   m_CharacterValidation: 0
   m_CharacterLimit: 0
@@ -3025,7 +3019,7 @@ MonoBehaviour:
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 0
-    m_HorizontalOverflow: 1
+    m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
@@ -3037,11 +3031,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1575042759}
   m_CullTransparentMesh: 1
---- !u!1 &1712544086 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4049399938907982155, guid: 14b66105bf35e46aebc2ecf9190884ab, type: 3}
-  m_PrefabInstance: {fileID: 8766015528985960091}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1753701777 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6285710152121336011, guid: de1823b6633e64d6f87be7c0dfdfb0d3, type: 3}
@@ -3390,12 +3379,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 246a6b7ceada849c8b758f260dd17e87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  variableCubePrefab: {fileID: 2231863048394520310, guid: 9a477fb2a9ce04722abbb93228ebd7e9, type: 3}
-  assignPrefab: {fileID: 1712544086}
-  ifPrefab: {fileID: 3311962404997835531, guid: 96e5bacafca604c7794607accd9f593a, type: 3}
-  callPrefab: {fileID: 2198603600990670906, guid: f395023c846ae49528df847cace3d087, type: 3}
-  constantPrefab: {fileID: 4544145062212279024, guid: e05cf928fd1814eb7ad56cf8419c73eb, type: 3}
-  binOpPrefab: {fileID: 4120326234857662020, guid: ea98abc1269fb40c9a851c2a7057a5a3, type: 3}
 --- !u!1 &1920560339
 GameObject:
   m_ObjectHideFlags: 0
@@ -4154,6 +4137,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Text (Legacy)
       objectReference: {fileID: 0}
+    - target: {fileID: 6285710152121336011, guid: de1823b6633e64d6f87be7c0dfdfb0d3, type: 3}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6632125302492674578, guid: de1823b6633e64d6f87be7c0dfdfb0d3, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4180,11 +4167,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6632125302492674578, guid: de1823b6633e64d6f87be7c0dfdfb0d3, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 160
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 6632125302492674578, guid: de1823b6633e64d6f87be7c0dfdfb0d3, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 30
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 6632125302492674578, guid: de1823b6633e64d6f87be7c0dfdfb0d3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4220,7 +4207,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6632125302492674578, guid: de1823b6633e64d6f87be7c0dfdfb0d3, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -100
+      value: -250
       objectReference: {fileID: 0}
     - target: {fileID: 6632125302492674578, guid: de1823b6633e64d6f87be7c0dfdfb0d3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

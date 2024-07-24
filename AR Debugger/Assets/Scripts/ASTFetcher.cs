@@ -15,7 +15,7 @@ public class ASTFetcher : MonoBehaviour
         Debug.Log("Starting FetchAST...");
         var jsonData = new Dictionary<string, string>
         {
-            { "code", code.Replace("\\n", "\n") }
+            { "code", code }
         };
 
         var jsonString = JsonConvert.SerializeObject(jsonData);

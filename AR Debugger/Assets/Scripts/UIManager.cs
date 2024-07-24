@@ -15,8 +15,8 @@ public class UIManager : MonoBehaviour
 
     public void OnGenerateButtonClick()
     {
-        outputText.text = ""; // Clear previous output
-        string code = inputField.text.Replace("\\n", "\n");  // Replace \\n with \n
+        outputText.text = ""; // 이전 출력 지우기
+        string code = inputField.text;  // \\n을 \n으로 대체할 필요 없음, 그대로 가져오기
         astVisualizer.GetComponent<ASTFetcher>().StartFetch(code);
     }
 
