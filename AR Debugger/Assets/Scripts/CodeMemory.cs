@@ -40,7 +40,22 @@ public class CodeMemory : MonoBehaviour
                 if (node.Value is JObject)
                 {
                     JObject jObject = node.Value as JObject;
-                    var valueType = jObject["Type"].ToString();
+                    Debug.Log("node.Value: " + node.Value);
+
+                    if (jObject == null)
+                    {
+                        Debug.LogError("node.Value cannot be cast to JObject");
+                        return;
+                    }
+
+                    JToken typeToken;
+                    if (!jObject.TryGetValue("Type", out typeToken))
+                    {
+                        Debug.LogError("JObject does not contain a 'Type' property");
+                        return;
+                    }
+
+                    var valueType = typeToken.ToString();
                     if (valueType == "Num")
                     {
                         value = jObject["N"].ToString();

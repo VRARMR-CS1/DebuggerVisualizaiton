@@ -14,17 +14,11 @@ public class ASTNode
     [JsonProperty("name")]
     public string Name { get; set; }
 
-    [JsonProperty("args")]
-    public Arguments Args { get; set; }
-
     [JsonProperty("value")]
     public JObject Value { get; set; }
 
     [JsonProperty("func")]
     public ASTNode Func { get; set; }
-
-    [JsonProperty("args")]
-    public List<ASTNode> CallArgs { get; set; }
 
     [JsonProperty("id")]
     public string Id { get; set; }

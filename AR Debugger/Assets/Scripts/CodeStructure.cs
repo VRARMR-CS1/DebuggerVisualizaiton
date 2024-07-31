@@ -7,7 +7,8 @@ public class CodeStructure : MonoBehaviour
 {
     public GameObject Headset;
     public Vector3 Location;
-    private GameObject LineUp;
+    public GameObject LineUp;
+    public GameObject lineUpPrefab; // Assign this in the Unity inspector
 
     void Start()
     {
@@ -21,8 +22,7 @@ public class CodeStructure : MonoBehaviour
     public void VisualizeSequence(string codeLine, Vector3 location)
     {
         // Create a new GameObject for the line of code
-        GameObject codeLineObject = new GameObject();
-        codeLineObject.transform.position = location;
+        GameObject codeLineObject = Instantiate(lineUpPrefab, location, Quaternion.identity);
 
         // Add a TextMeshPro component to the GameObject and set its text to the code line
         TextMeshPro tmp = codeLineObject.AddComponent<TextMeshPro>();
@@ -31,11 +31,27 @@ public class CodeStructure : MonoBehaviour
         // Force TextMeshPro to update so we can get the accurate bounds
         tmp.ForceMeshUpdate();
 
-        // Get the bounds of the GameObject
-        Bounds bounds = tmp.bounds;
+        Bounds lineUpBounds;
+        BoxCollider collider = codeLineObject.GetComponent<BoxCollider>();
 
-        // Update the location for the next line of code
+        if (collider != null)
+        {
+            lineUpBounds = collider.bounds;
+        }
+        else
+        {
+            MeshRenderer renderer = codeLineObject.GetComponent<MeshRenderer>();
+            if (renderer != null)
+            {
+                lineUpBounds = renderer.bounds;
+            }
+            else
+            {
+                Debug.LogError("LineUp object does not have a BoxCollider or MeshRenderer component");
+                return;
+            }
+        }
         // Move it to the right by the width of the current GameObject
-        Location += new Vector3(bounds.size.x, 0, 0);
+        Location += new Vector3(lineUpBounds.size.x, 0, 0);
     }
 }
