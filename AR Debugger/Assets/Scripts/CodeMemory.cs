@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using TMPro;
@@ -15,17 +14,22 @@ public class CodeMemory : MonoBehaviour
 
     public void Start()
     {
-        MovingObject = new GameObject();
-        MovingObject.transform.position = Headset.transform.position + Headset.transform.forward * 0.5f - new Vector3(0, 0.5f, 0);
+        Debug.Log("CodeMemory Start() called");
+        MovingObject = new GameObject("MovingObject");
+        MovingObject.transform.position = Headset.transform.position + Headset.transform.forward * 2.0f - new Vector3(0, 0.5f, 0);
 
-        // Add a TextMeshPro component to the GameObject and set its text to empty
+        // Add a TextMeshPro component to the MovingObject and set its text to empty
         MemoryFrameText = MovingObject.AddComponent<TextMeshPro>();
         MemoryFrameText.text = "";
+        MemoryFrameText.fontSize = 5; // Adjust font size for better visibility
+        MemoryFrameText.color = Color.black; // Adjust text color for better visibility
 
+        Debug.Log("MemoryFrameText initialized");
     }
 
     public void UpdateFrame(ASTNode node)
     {
+        Debug.Log("UpdateFrame called with node: " + node);
         string varName = null;
         string value = null;
 
@@ -49,51 +53,74 @@ public class CodeMemory : MonoBehaviour
                     }
 
                     JToken typeToken;
-                    if (!jObject.TryGetValue("Type", out typeToken))
+                    if (!jObject.TryGetValue("type", out typeToken))
                     {
-                        Debug.LogError("JObject does not contain a 'Type' property");
+                        Debug.LogError("JObject does not contain a 'type' property");
                         return;
                     }
 
                     var valueType = typeToken.ToString();
                     if (valueType == "Num")
                     {
-                        value = jObject["N"].ToString();
-                        // Update the value of the variable in the dictionary
+                        value = jObject["n"].ToString();
                         variables[varName] = int.Parse(value);
                     }
                     else if (valueType == "BinOp")
                     {
-                        var left = jObject["Left"]["Id"].ToString();
-                        var op = jObject["Op"]["Type"].ToString();
-                        var right = jObject["Right"]["N"].ToString();
+                        var left = jObject["left"]["id"].ToString();
+                        var op = jObject["op"]["type"].ToString();
+                        int leftValue = 0;
 
-                        // Evaluate the operation using the values of the operands from the dictionary
+                        if (!variables.TryGetValue(left, out leftValue))
+                        {
+                            Debug.LogError("Variable " + left + " not found in variables dictionary.");
+                            return;
+                        }
+
+                        int rightValue = 0;
+
+                        if (jObject["right"]["type"].ToString() == "Num")
+                        {
+                            rightValue = int.Parse(jObject["right"]["n"].ToString());
+                        }
+                        else if (jObject["right"]["type"].ToString() == "Name")
+                        {
+                            var right = jObject["right"]["id"].ToString();
+                            if (!variables.TryGetValue(right, out rightValue))
+                            {
+                                Debug.LogError("Variable " + right + " not found in variables dictionary.");
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            Debug.LogError("Unsupported right operand type in BinOp.");
+                            return;
+                        }
+
                         int result = 0;
                         if (op == "Add")
                         {
-                            result = variables[left] + int.Parse(right);
+                            result = leftValue + rightValue;
                         }
                         else if (op == "Sub")
                         {
-                            result = variables[left] - int.Parse(right);
+                            result = leftValue - rightValue;
                         }
                         else if (op == "Mult")
                         {
-                            result = variables[left] * int.Parse(right);
+                            result = leftValue * rightValue;
                         }
                         else if (op == "Div")
                         {
-                            result = variables[left] / int.Parse(right);
+                            result = leftValue / rightValue;
                         }
                         else if (op == "Mod")
                         {
-                            result = variables[left] % int.Parse(right);
+                            result = leftValue % rightValue;
                         }
-                        // Add other operations as needed.
 
                         value = result.ToString();
-                        // Update the value of the variable in the dictionary
                         variables[varName] = result;
                     }
                 }
@@ -102,33 +129,31 @@ public class CodeMemory : MonoBehaviour
 
         if (varName != null && value != null)
         {
-            // Check if variable already exists in the memory frame
             for (int i = 0; i < MemoryFrame.Count; i++)
             {
                 if (MemoryFrame[i].StartsWith(varName + " ="))
                 {
-                    // Variable found, update its value
                     MemoryFrame[i] = $"{varName} | {value}";
                     return;
                 }
             }
 
-            // Variable not found, add it to the memory frame
             MemoryFrame.Add($"{varName} | {value}");
         }
     }
 
     public void Visualize(List<string> frame, Vector3 location)
     {
-        // Move the GameObject smoothly from its current location to the new location
+        Debug.Log("Visualize called");
+        
         MovingObject.transform.position = Vector3.Lerp(MovingObject.transform.position, location, Time.deltaTime);
-
-        // Update the text of the GameObject with the contents of the list
+        
         StringBuilder sb = new StringBuilder();
         foreach (string line in frame)
         {
             sb.AppendLine(line);
         }
         MemoryFrameText.text = sb.ToString();
+        Debug.Log("MemoryFrameText.text: " + MemoryFrameText.text);
     }
 }

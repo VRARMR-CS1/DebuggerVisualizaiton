@@ -11,9 +11,9 @@ public class Traverser : MonoBehaviour
 
     public void Traverse(ASTNode node, List<string> pythonCode)
     {
-        if (node == null || node.Body == null)
+        if (node == null)
         {
-            Debug.LogError("Node or node.Body is null");
+            Debug.LogError("Node is null");
             return;
         }
 
@@ -34,13 +34,13 @@ public class Traverser : MonoBehaviour
             Debug.LogError("PythonCode is null");
             return;
         }
+
         // Visit each node of the AST
-        foreach (ASTNode child in node.Body)
+        foreach (ASTNode child in node.Body ?? new List<ASTNode>())
         {
-            // Check if child is not null
             if (child != null)
             {
-                // Empty code where the operations for conditionals & loops would be
+                // Check if child is not null
                 if (child.Type == "If" || child.Type == "For" || child.Type == "While" || child.Type == "IfExp" || child.Type == "With" || child.Type == "Try")
                 {
                     continue;
@@ -53,22 +53,28 @@ public class Traverser : MonoBehaviour
                 }
 
                 // Get the corresponding string from the Python Code list
-                string code = pythonCode[child.LineNumber.Value - 1];
+                if (child.LineNumber.HasValue && child.LineNumber.Value - 1 < pythonCode.Count)
+                {
+                    string code = pythonCode[child.LineNumber.Value - 1];
 
-                // Call the sequence function from the lineup class
-                UserStructure.VisualizeSequence(code, UserStructure.Location);
+                    // Call the sequence function from the lineup class
+                    UserStructure.VisualizeSequence(code, UserStructure.Location);
 
-                // Call the memory frame sequence, passing the memory frame values and location for generation into it
-                UserMemory.Visualize(UserMemory.MemoryFrame, UserStructure.Location);
+                    // Call the memory frame sequence, passing the memory frame values and location for generation into it
+                    UserMemory.Visualize(UserMemory.MemoryFrame, UserStructure.Location);
+                }
+                else
+                {
+                    Debug.LogError("LineNumber is out of range: " + child.LineNumber);
+                }
 
                 // Recursively traverse the child nodes
                 Traverse(child, pythonCode);
             }
             else
             {
-                Debug.Log("child is null");
+                Debug.LogError("child is null");
             }
         }
     }
-
 }
