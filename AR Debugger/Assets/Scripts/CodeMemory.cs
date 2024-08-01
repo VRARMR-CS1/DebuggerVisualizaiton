@@ -146,7 +146,7 @@ public class CodeMemory : MonoBehaviour
     {
         Debug.Log("Visualize called");
         
-        MovingObject.transform.position = Vector3.Lerp(MovingObject.transform.position, location, Time.deltaTime);
+        MovingObject.transform.position = Vector3.Lerp(MovingObject.transform.position, location, 1.0f * Time.deltaTime);
         
         StringBuilder sb = new StringBuilder();
         foreach (string line in frame)
