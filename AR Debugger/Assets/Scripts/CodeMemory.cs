@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
@@ -7,24 +8,48 @@ using System.Text;
 public class CodeMemory : MonoBehaviour
 {
     public List<string> MemoryFrame = new List<string>();
-    public TextMeshPro MemoryFrameText;
+    public TextMeshProUGUI MemoryFrameText;
     public GameObject Headset;
     public Dictionary<string, int> variables = new Dictionary<string, int>();
     public GameObject MovingObject;
+    public GameObject movingObjectPrefab; // Assign this in the Unity inspector
 
     public void Start()
     {
         Debug.Log("CodeMemory Start() called");
-        MovingObject = new GameObject("MovingObject");
-        MovingObject.transform.position = Headset.transform.position + Headset.transform.forward * 2.0f - new Vector3(0, 0.5f, 0);
 
-        // Add a TextMeshPro component to the MovingObject and set its text to empty
-        MemoryFrameText = MovingObject.AddComponent<TextMeshPro>();
+        // Instantiate the MovingObject from the prefab
+        MovingObject = Instantiate(movingObjectPrefab, Headset.transform.position + Headset.transform.forward * 2.0f - new Vector3(0, 0.5f, 0), movingObjectPrefab.transform.rotation);
+        MovingObject.SetActive(true);
+        Debug.Log($"Initial position of MovingObject: {MovingObject.transform.position}");
+
+        // Create a Canvas as a child of the MovingObject
+        GameObject canvasObject = new GameObject("Canvas");
+        Canvas canvas = canvasObject.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.WorldSpace;
+        canvasObject.AddComponent<CanvasRenderer>();
+        canvasObject.transform.SetParent(MovingObject.transform);
+
+        // Position the canvas in front of the higher part of the object
+        canvasObject.transform.localPosition = new Vector3(1.5f, 1.5f, 2.1f); // Adjust the position as needed
+        canvasObject.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        RectTransform rectTransform = canvasObject.GetComponent<RectTransform>();
+        rectTransform.sizeDelta = new Vector2(13, 20);
+
+        // Create a UI Text object and set its properties
+        GameObject textObject = new GameObject("Text");
+        textObject.transform.SetParent(canvasObject.transform);
+        textObject.transform.localPosition = Vector3.zero;
+        textObject.transform.localScale = Vector3.one;
+
+        MemoryFrameText = textObject.AddComponent<TextMeshProUGUI>();
         MemoryFrameText.text = "";
-        MemoryFrameText.fontSize = 5; // Adjust font size for better visibility
+        MemoryFrameText.fontSize = 3; // Adjust font size for better visibility
         MemoryFrameText.color = Color.black; // Adjust text color for better visibility
+        MemoryFrameText.rectTransform.sizeDelta = new Vector2(13, 20);
 
         Debug.Log("MemoryFrameText initialized");
+
     }
 
     public void UpdateFrame(ASTNode node)
@@ -145,9 +170,28 @@ public class CodeMemory : MonoBehaviour
     public void Visualize(List<string> frame, Vector3 location)
     {
         Debug.Log("Visualize called");
-        
-        MovingObject.transform.position = Vector3.Lerp(MovingObject.transform.position, location, 1.0f * Time.deltaTime);
-        
+        StartCoroutine(AnimateMemoryFrame(frame, location));
+    }
+
+    private IEnumerator AnimateMemoryFrame(List<string> frame, Vector3 location)
+    {
+        float duration = 2.0f; // Duration for each animation step
+        float elapsedTime = 0f;
+
+        Vector3 startPosition = MovingObject.transform.position;
+        Vector3 endPosition = location;
+
+        Debug.Log($"Animating from {startPosition} to {endPosition}");
+
+        while (elapsedTime < duration)
+        {
+            MovingObject.transform.position = Vector3.Lerp(startPosition, endPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        MovingObject.transform.position = endPosition;
+
         StringBuilder sb = new StringBuilder();
         foreach (string line in frame)
         {

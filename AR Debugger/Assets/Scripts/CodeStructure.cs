@@ -14,7 +14,7 @@ public class CodeStructure : MonoBehaviour
     {
         // Create a new GameObject a little in front and below the VR headset's location
         LineUp = new GameObject();
-        LineUp.transform.position = Headset.transform.position + Headset.transform.forward * 0.5f - new Vector3(0, 0.6f, 0);
+        LineUp.transform.position = Headset.transform.position + Headset.transform.forward * 0.1f - new Vector3(0, 0.6f, 0);
         Location = LineUp.transform.position;
     }
 
@@ -49,7 +49,6 @@ public class CodeStructure : MonoBehaviour
         text.rectTransform.sizeDelta = new Vector2(13, 20);
 
         text.alignment = TextAlignmentOptions.Center;
-
 
         // Calculate the bounds of the current object
         Bounds lineUpBounds;
