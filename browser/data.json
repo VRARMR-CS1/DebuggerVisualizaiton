@@ -1,0 +1,57 @@
+{
+    "type": "AST",
+    "ast": {
+        "Module": {
+            "body": [
+                {
+                    "FunctionDef": {
+                        "name": "hello",
+                        "args": {
+                            "arguments": {
+                                "posonlyargs": [],
+                                "args": [],
+                                "vararg": null,
+                                "kwonlyargs": [],
+                                "kw_defaults": [],
+                                "kwarg": null,
+                                "defaults": []
+                            }
+                        },
+                        "body": [
+                            {
+                                "Expr": {
+                                    "value": {
+                                        "Call": {
+                                            "func": {
+                                                "Name": {
+                                                    "id": "print",
+                                                    "ctx": {
+                                                        "Load": {}
+                                                    }
+                                                }
+                                            },
+                                            "args": [
+                                                {
+                                                    "Constant": {
+                                                        "value": "HE",
+                                                        "kind": null
+                                                    }
+                                                }
+                                            ],
+                                            "keywords": []
+                                        }
+                                    }
+                                }
+                            }
+                        ],
+                        "decorator_list": [],
+                        "returns": null,
+                        "type_comment": null,
+                        "type_params": []
+                    }
+                }
+            ],
+            "type_ignores": []
+        }
+    }
+}
