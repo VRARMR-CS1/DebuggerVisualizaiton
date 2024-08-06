@@ -638,7 +638,7 @@ MonoBehaviour:
   MemoryFrameText: {fileID: 0}
   Headset: {fileID: 885073926}
   MovingObject: {fileID: 4523198290918200880, guid: 9d85c392481100c47aac296a55c4b02b, type: 3}
-  movingObjectPrefab: {fileID: 4523198290918200880, guid: 9d85c392481100c47aac296a55c4b02b, type: 3}
+  movingObjectPrefab: {fileID: 8583004205712062139, guid: 3da6ec34662904fe68a6f3ca2e03678d, type: 3}
 --- !u!4 &1945186445
 Transform:
   m_ObjectHideFlags: 0

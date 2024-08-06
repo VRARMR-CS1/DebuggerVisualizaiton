@@ -12,14 +12,17 @@ public class CodeMemory : MonoBehaviour
     public GameObject Headset;
     public Dictionary<string, int> variables = new Dictionary<string, int>();
     public GameObject MovingObject;
-    public GameObject movingObjectPrefab; // Assign this in the Unity inspector
+    public GameObject movingObjectPrefab;
 
     public void Start()
     {
         Debug.Log("CodeMemory Start() called");
 
         // Instantiate the MovingObject from the prefab
-        MovingObject = Instantiate(movingObjectPrefab, Headset.transform.position + Headset.transform.forward * 2.0f - new Vector3(0, 0.5f, 0), movingObjectPrefab.transform.rotation);
+        MovingObject = Instantiate(movingObjectPrefab);
+        MovingObject.transform.SetParent(Headset.transform);
+        MovingObject.transform.localPosition = new Vector3(6.2863f, -0.4f, 9.65f); // Set the local position directly
+        MovingObject.transform.localScale = new Vector3(0.7f, 0.7f, 0.6f); // Set the local scale as desired
         MovingObject.SetActive(true);
         Debug.Log($"Initial position of MovingObject: {MovingObject.transform.position}");
 
@@ -30,8 +33,8 @@ public class CodeMemory : MonoBehaviour
         canvasObject.AddComponent<CanvasRenderer>();
         canvasObject.transform.SetParent(MovingObject.transform);
 
-        // Position the canvas in front of the higher part of the object
-        canvasObject.transform.localPosition = new Vector3(1.5f, 1.5f, 2.1f); // Adjust the position as needed
+        // Position the canvas in front of the cube
+        canvasObject.transform.localPosition = Vector3.zero;
         canvasObject.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         RectTransform rectTransform = canvasObject.GetComponent<RectTransform>();
         rectTransform.sizeDelta = new Vector2(13, 20);
@@ -39,17 +42,16 @@ public class CodeMemory : MonoBehaviour
         // Create a UI Text object and set its properties
         GameObject textObject = new GameObject("Text");
         textObject.transform.SetParent(canvasObject.transform);
-        textObject.transform.localPosition = Vector3.zero;
+        textObject.transform.localPosition = new Vector3(0, -6, -10); // Text position set to (0, -6, -10)
         textObject.transform.localScale = Vector3.one;
 
         MemoryFrameText = textObject.AddComponent<TextMeshProUGUI>();
         MemoryFrameText.text = "";
-        MemoryFrameText.fontSize = 3; // Adjust font size for better visibility
+        MemoryFrameText.fontSize = 2; // Adjust font size for better visibility
         MemoryFrameText.color = Color.black; // Adjust text color for better visibility
         MemoryFrameText.rectTransform.sizeDelta = new Vector2(13, 20);
 
         Debug.Log("MemoryFrameText initialized");
-
     }
 
     public void UpdateFrame(ASTNode node)
@@ -170,6 +172,9 @@ public class CodeMemory : MonoBehaviour
     public void Visualize(List<string> frame, Vector3 location)
     {
         Debug.Log("Visualize called");
+        // Adjust the location to move the object a bit higher
+        location.y += 0.6f; // Adjust the y-coordinate to move the object higher
+        location.z += -0.3f;
         StartCoroutine(AnimateMemoryFrame(frame, location));
     }
 
@@ -194,9 +199,7 @@ public class CodeMemory : MonoBehaviour
 
         StringBuilder sb = new StringBuilder();
         foreach (string line in frame)
-        {
             sb.AppendLine(line);
-        }
         MemoryFrameText.text = sb.ToString();
         Debug.Log("MemoryFrameText.text: " + MemoryFrameText.text);
     }
