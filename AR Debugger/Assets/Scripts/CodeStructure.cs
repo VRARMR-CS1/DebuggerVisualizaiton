@@ -1,64 +1,64 @@
 using UnityEngine;
-using TMPro; // TextMesh Pro 네임스페이스 추가
+using TMPro; // Add TextMesh Pro namespace
 
 public class CodeStructure : MonoBehaviour
 {
     public GameObject Headset;
     public Vector3 Location;
     public GameObject LineUp;
-    public GameObject lineUpPrefab; // Unity 인스펙터에서 할당합니다.
-    public float beltSpacing = 2.0f; // 098-belt(clone) 간격을 더 넓힘
+    public GameObject lineUpPrefab; // Assign in the Unity inspector.
+    public float beltSpacing = 1.0f; // Increase the spacing between 098-belt(clone)
 
-    private int beltCounter = 0; // 몇 번째 벨트를 생성했는지 카운트
+    private int beltCounter = 0; // Counter to track the number of belts created
 
     void Start()
     {
-        // VR 헤드셋의 위치에서 조금 앞과 아래에 새로운 GameObject를 생성합니다.
-        GameObject beltObject = GameObject.Find("098-belt"); // 098-belt 오브젝트를 찾습니다.
+        // Create a new GameObject slightly in front and below the VR headset's location.
+        GameObject beltObject = GameObject.Find("098-belt"); // Find the 098-belt object.
         if (beltObject == null)
         {
-            Debug.LogError("098-belt 오브젝트를 찾을 수 없습니다.");
+            Debug.LogError("Cannot find the 098-belt object.");
             return;
         }
 
         LineUp = new GameObject();
-        LineUp.transform.SetParent(beltObject.transform); // 부모를 098-belt로 설정합니다.
+        LineUp.transform.SetParent(beltObject.transform); // Set the parent to 098-belt.
         LineUp.transform.position = Headset.transform.position + Headset.transform.forward * 0.1f - new Vector3(0, 0.6f, 0);
         Location = LineUp.transform.position;
     }
 
     public void VisualizeSequence(string codeLine, Vector3 location)
     {
-        // 코드 라인을 위한 새로운 GameObject를 생성합니다.
+        // Create a new GameObject for the code line.
         GameObject codeLineObject = Instantiate(lineUpPrefab, location + new Vector3(beltCounter * beltSpacing, 0, 0), lineUpPrefab.transform.rotation);
-        codeLineObject.transform.SetParent(GameObject.Find("098-belt").transform); // 부모를 098-belt로 설정합니다.
+        codeLineObject.transform.SetParent(GameObject.Find("098-belt").transform); // Set the parent to 098-belt.
         codeLineObject.SetActive(true);
 
-        beltCounter++; // 벨트 카운터 증가
+        beltCounter++; // Increase the belt counter
 
-        // codeLineObject의 자식으로 Canvas를 생성합니다.
+        // Create a Canvas as a child of the codeLineObject.
         GameObject canvasObject = new GameObject("Canvas");
         Canvas canvas = canvasObject.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.WorldSpace;
         canvasObject.AddComponent<CanvasRenderer>();
         canvasObject.transform.SetParent(codeLineObject.transform);
 
-        // 098-belt(Clone)의 Plane.004 앞에 Canvas를 위치시킵니다.
+        // Position the Canvas in front of Plane.004 of 098-belt(Clone).
         Transform planeTransform = codeLineObject.transform.Find("Plane.004");
         if (planeTransform != null)
         {
-            canvasObject.transform.position = planeTransform.position + new Vector3(0, 0.8f, -1f); // Plane.004 앞에 위치시키고, y축과 z축 위치 조정
+            canvasObject.transform.position = planeTransform.position + new Vector3(0, 0.8f, -1f); // Position in front of Plane.004, adjusting the y and z axes
         }
         else
         {
-            Debug.LogError("Plane.004를 찾을 수 없습니다.");
+            Debug.LogError("Cannot find Plane.004.");
         }
 
         canvasObject.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         RectTransform rectTransform = canvasObject.GetComponent<RectTransform>();
         rectTransform.sizeDelta = new Vector2(13, 20);
 
-        // UI 텍스트 오브젝트를 생성하고 속성을 설정합니다.
+        // Create a UI text object and set its properties.
         GameObject textObject = new GameObject("Text");
         textObject.transform.SetParent(canvasObject.transform);
         textObject.transform.localPosition = Vector3.zero;
@@ -66,12 +66,12 @@ public class CodeStructure : MonoBehaviour
 
         TextMeshProUGUI text = textObject.AddComponent<TextMeshProUGUI>();
         text.text = codeLine;
-        text.fontSize = 3; // 폰트를 더 작게 만듭니다.
+        text.fontSize = 3; // Make the font smaller
         text.rectTransform.sizeDelta = new Vector2(13, 20);
 
         text.alignment = TextAlignmentOptions.Center;
 
-        // 현재 오브젝트의 경계를 계산합니다.
+        // Calculate the bounds of the current object.
         Bounds lineUpBounds;
         BoxCollider collider = codeLineObject.GetComponent<BoxCollider>();
 
@@ -88,12 +88,12 @@ public class CodeStructure : MonoBehaviour
             }
             else
             {
-                Debug.LogError("LineUp 오브젝트에 BoxCollider나 MeshRenderer 컴포넌트가 없습니다.");
+                Debug.LogError("LineUp object does not have a BoxCollider or MeshRenderer component.");
                 return;
             }
         }
 
-        // 현재 GameObject의 너비의 2배만큼 위치를 오른쪽으로 이동시킵니다.
-        Location += new Vector3(lineUpBounds.size.x * 6, 0, 0);
+        // Move the location to the right by twice the width of the current GameObject.
+        Location += new Vector3(lineUpBounds.size.x * 5, 0, 0);
     }
 }
