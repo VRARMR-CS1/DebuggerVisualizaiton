@@ -42,12 +42,12 @@ public class CodeMemory : MonoBehaviour
         // Create a UI Text object and set its properties
         GameObject textObject = new GameObject("Text");
         textObject.transform.SetParent(canvasObject.transform);
-        textObject.transform.localPosition = new Vector3(1, -6, -10); // Text position set to (0, -6, -10)
+        textObject.transform.localPosition = new Vector3(4, -5, -10); // Text position set to (0, -6, -10)
         textObject.transform.localScale = Vector3.one;
 
         MemoryFrameText = textObject.AddComponent<TextMeshProUGUI>();
         MemoryFrameText.text = "";
-        MemoryFrameText.fontSize = 3; // Adjust font size for better visibility
+        MemoryFrameText.fontSize = 2.5f; // Adjust font size for better visibility
         MemoryFrameText.color = Color.black; // Adjust text color for better visibility
         MemoryFrameText.rectTransform.sizeDelta = new Vector2(13, 20);
 
