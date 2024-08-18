@@ -373,8 +373,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4966719baa26e4b0e8231a24d9bd491a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FocusMode: 1
-  m_LightEstimationMode: 0
+  m_FocusMode: -1
+  m_LightEstimationMode: -1
   m_AutoFocus: 1
   m_LightEstimation: 0
   m_FacingDirection: 1
@@ -2358,6 +2358,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 448957031045716853, guid: ed76326b15f3e466b958c66bc5dc4f74, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3708390932767786160, guid: ed76326b15f3e466b958c66bc5dc4f74, type: 3}
       propertyPath: m_Name
       value: 098-belt
@@ -2403,7 +2407,11 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 8458346700141148488, guid: ed76326b15f3e466b958c66bc5dc4f74, type: 3}
+    - {fileID: 4910405777821667105, guid: ed76326b15f3e466b958c66bc5dc4f74, type: 3}
+    - {fileID: 5247357342853329866, guid: ed76326b15f3e466b958c66bc5dc4f74, type: 3}
+    - {fileID: 1118929889340705930, guid: ed76326b15f3e466b958c66bc5dc4f74, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed76326b15f3e466b958c66bc5dc4f74, type: 3}
