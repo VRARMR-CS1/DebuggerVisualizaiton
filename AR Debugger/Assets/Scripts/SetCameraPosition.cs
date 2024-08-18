@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SetCameraPosition : MonoBehaviour
 {
-    public Vector3 newPosition = new Vector3(10f, 3f, -20f);
+    public Vector3 newPosition = new Vector3(30f, 9f, -40f);
 
     void Start()
     {

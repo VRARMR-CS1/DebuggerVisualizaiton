@@ -47,7 +47,7 @@ public class CodeStructure : MonoBehaviour
         Transform planeTransform = codeLineObject.transform.Find("Plane.004");
         if (planeTransform != null)
         {
-            canvasObject.transform.position = planeTransform.position + new Vector3(0, 0.8f, -1f); // Position in front of Plane.004, adjusting the y and z axes
+            canvasObject.transform.position = planeTransform.position + new Vector3(0, 3.0f, -3.0f); // Position in front of Plane.004, adjusting the y and z axes
         }
         else
         {
@@ -66,7 +66,7 @@ public class CodeStructure : MonoBehaviour
 
         TextMeshProUGUI text = textObject.AddComponent<TextMeshProUGUI>();
         text.text = codeLine;
-        text.fontSize = 3; // Make the font smaller
+        text.fontSize = 5; // Make the font smaller
         text.rectTransform.sizeDelta = new Vector2(13, 20);
 
         text.alignment = TextAlignmentOptions.Center;
