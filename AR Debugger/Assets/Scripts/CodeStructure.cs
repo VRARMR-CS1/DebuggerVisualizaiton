@@ -7,7 +7,7 @@ public class CodeStructure : MonoBehaviour
     public Vector3 Location;
     public GameObject LineUp;
     public GameObject lineUpPrefab; // Assign in the Unity inspector.
-    public float beltSpacing = 1.0f; // Increase the spacing between 098-belt(clone)
+    public float beltSpacing = 0.5f; // Increase the spacing between 098-belt(clone)
 
     private int beltCounter = 0; // Counter to track the number of belts created
 
@@ -47,7 +47,7 @@ public class CodeStructure : MonoBehaviour
         Transform planeTransform = codeLineObject.transform.Find("Plane.004");
         if (planeTransform != null)
         {
-            canvasObject.transform.position = planeTransform.position + new Vector3(0, 3.0f, -3.0f); // Position in front of Plane.004, adjusting the y and z axes
+            canvasObject.transform.position = planeTransform.position + new Vector3(0f, 1.5f, -1f); // Position in front of Plane.004, adjusting the y and z axes
         }
         else
         {
@@ -66,7 +66,7 @@ public class CodeStructure : MonoBehaviour
 
         TextMeshProUGUI text = textObject.AddComponent<TextMeshProUGUI>();
         text.text = codeLine;
-        text.fontSize = 5; // Make the font smaller
+        text.fontSize = 5f; // Make the font smaller
         text.rectTransform.sizeDelta = new Vector2(13, 20);
 
         text.alignment = TextAlignmentOptions.Center;
