@@ -21,7 +21,6 @@ public class CodeMemory : MonoBehaviour
         // Instantiate the MovingObject from the prefab
         MovingObject = Instantiate(movingObjectPrefab);
         MovingObject.transform.SetParent(Headset.transform);
-        MovingObject.transform.localPosition = new Vector3(6.2863f, 0.2f, 9.65f); // Set the local position directly and adjust the y position
         MovingObject.transform.localScale = new Vector3(0.7f, 0.7f, 0.6f); // Set the local scale as desired
         MovingObject.SetActive(true);
         Debug.Log($"Initial position of MovingObject: {MovingObject.transform.position}");
@@ -173,8 +172,9 @@ public class CodeMemory : MonoBehaviour
     {
         Debug.Log("Visualize called");
         // Adjust the location to move the object a bit higher
+        location.x += 1.3f;
         location.y += 1.3f; // Adjust the y-coordinate to move the object higher
-        location.z += -0.3f;
+        location.z += 0.6f;
         StartCoroutine(AnimateMemoryFrame(frame, location));
     }
 
