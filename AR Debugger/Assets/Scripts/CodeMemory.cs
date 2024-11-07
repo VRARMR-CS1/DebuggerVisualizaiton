@@ -21,8 +21,7 @@ public class CodeMemory : MonoBehaviour
         // Instantiate the MovingObject from the prefab
         MovingObject = Instantiate(movingObjectPrefab);
         MovingObject.transform.SetParent(Headset.transform);
-        MovingObject.transform.localPosition = new Vector3(6.2863f, 3.0f, 9.65f); // Set the local position directly and adjust the y position
-        MovingObject.transform.localScale = new Vector3(1f, 1f, 1f); // Set the local scale as desired
+        MovingObject.transform.localScale = new Vector3(0.7f, 0.7f, 0.6f); // Set the local scale as desired
         MovingObject.SetActive(true);
         Debug.Log($"Initial position of MovingObject: {MovingObject.transform.position}");
 
@@ -42,12 +41,12 @@ public class CodeMemory : MonoBehaviour
         // Create a UI Text object and set its properties
         GameObject textObject = new GameObject("Text");
         textObject.transform.SetParent(canvasObject.transform);
-        textObject.transform.localPosition = new Vector3(4, -5, -10); // Text position set to (0, -6, -10)
+        textObject.transform.localPosition = new Vector3(0, -6, -10); // Text position set to (0, -6, -10)
         textObject.transform.localScale = Vector3.one;
 
         MemoryFrameText = textObject.AddComponent<TextMeshProUGUI>();
         MemoryFrameText.text = "";
-        MemoryFrameText.fontSize = 2.5f; // Adjust font size for better visibility
+        MemoryFrameText.fontSize = 2; // Adjust font size for better visibility
         MemoryFrameText.color = Color.black; // Adjust text color for better visibility
         MemoryFrameText.rectTransform.sizeDelta = new Vector2(13, 20);
 
@@ -173,8 +172,9 @@ public class CodeMemory : MonoBehaviour
     {
         Debug.Log("Visualize called");
         // Adjust the location to move the object a bit higher
-        location.y += 1.5f; // Adjust the y-coordinate to move the object higher
-        location.z += -0.2f;
+        location.x += 1.3f;
+        location.y += 1.3f; // Adjust the y-coordinate to move the object higher
+        location.z += 0.6f;
         StartCoroutine(AnimateMemoryFrame(frame, location));
     }
 
