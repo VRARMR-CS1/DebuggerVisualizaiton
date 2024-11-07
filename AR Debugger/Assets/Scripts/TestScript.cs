@@ -49,6 +49,28 @@ public class TestScript : MonoBehaviour
     ]
 }";
 
+        string codeFrameJson = @"[
+            { 'line_number': 1, 'locals': { 'a': 1 } },
+            { 'line_number': 2, 'locals': { 'a': 1, 'b': 2 } },
+            { 'line_number': 3, 'locals': { 'a': 1, 'b': 2, 'c': 3 } }
+        ]";
+
+        List<CodeFrame> codeFrames;
+        try
+        {
+            codeFrames = JsonConvert.DeserializeObject<List<CodeFrame>>(codeFrameJson);
+            if (codeFrames == null)
+            {
+                Debug.LogError("Failed to deserialize code frames.");
+                return;
+            }
+        }
+        catch (JsonException e)
+        {
+            Debug.LogError("JSON deserialization error: " + e.Message);
+            return;
+        }
+
         // Convert the JSON string to an ASTNode object
         ASTNode ast;
         try
@@ -78,7 +100,7 @@ public class TestScript : MonoBehaviour
         // Call the Traverse method with the Python code and AST
         try
         {
-            traverser.Traverse(ast, pythonCode);
+            traverser.Traverse(ast, pythonCode, codeFrames);
         }
         catch (System.Exception e)
         {

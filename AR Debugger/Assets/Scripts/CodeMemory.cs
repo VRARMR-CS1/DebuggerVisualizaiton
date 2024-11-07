@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using UnityEngine;
 using TMPro;
 using System.Text;
@@ -21,6 +21,7 @@ public class CodeMemory : MonoBehaviour
         // Instantiate the MovingObject from the prefab
         MovingObject = Instantiate(movingObjectPrefab);
         MovingObject.transform.SetParent(Headset.transform);
+        MovingObject.transform.localPosition = new Vector3(6.2863f, -0.4f, 9.65f); // Set the local position directly
         MovingObject.transform.localScale = new Vector3(0.7f, 0.7f, 0.6f); // Set the local scale as desired
         MovingObject.SetActive(true);
         Debug.Log($"Initial position of MovingObject: {MovingObject.transform.position}");
@@ -53,128 +54,37 @@ public class CodeMemory : MonoBehaviour
         Debug.Log("MemoryFrameText initialized");
     }
 
-    public void UpdateFrame(ASTNode node)
+    public void UpdateFrameFromJson(CodeFrame frame)
     {
-        Debug.Log("UpdateFrame called with node: " + node);
-        string varName = null;
-        string value = null;
+        MemoryFrame.Clear();
+        // Directly access the frame's locals
+        Dictionary<string, object> locals = frame.Locals;
 
-        if (node.Targets != null)
+        // Update MemoryFrame for locals
+        foreach (var kvp in locals)
         {
-            var target = node.Targets[0];
-            var idProperty = target.GetType().GetProperty("Id");
-            if (idProperty != null)
-            {
-                varName = idProperty.GetValue(target).ToString();
-
-                if (node.Value is JObject)
-                {
-                    JObject jObject = node.Value as JObject;
-                    Debug.Log("node.Value: " + node.Value);
-
-                    if (jObject == null)
-                    {
-                        Debug.LogError("node.Value cannot be cast to JObject");
-                        return;
-                    }
-
-                    JToken typeToken;
-                    if (!jObject.TryGetValue("type", out typeToken))
-                    {
-                        Debug.LogError("JObject does not contain a 'type' property");
-                        return;
-                    }
-
-                    var valueType = typeToken.ToString();
-                    if (valueType == "Num")
-                    {
-                        value = jObject["n"].ToString();
-                        variables[varName] = int.Parse(value);
-                    }
-                    else if (valueType == "BinOp")
-                    {
-                        var left = jObject["left"]["id"].ToString();
-                        var op = jObject["op"]["type"].ToString();
-                        int leftValue = 0;
-
-                        if (!variables.TryGetValue(left, out leftValue))
-                        {
-                            Debug.LogError("Variable " + left + " not found in variables dictionary.");
-                            return;
-                        }
-
-                        int rightValue = 0;
-
-                        if (jObject["right"]["type"].ToString() == "Num")
-                        {
-                            rightValue = int.Parse(jObject["right"]["n"].ToString());
-                        }
-                        else if (jObject["right"]["type"].ToString() == "Name")
-                        {
-                            var right = jObject["right"]["id"].ToString();
-                            if (!variables.TryGetValue(right, out rightValue))
-                            {
-                                Debug.LogError("Variable " + right + " not found in variables dictionary.");
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            Debug.LogError("Unsupported right operand type in BinOp.");
-                            return;
-                        }
-
-                        int result = 0;
-                        if (op == "Add")
-                        {
-                            result = leftValue + rightValue;
-                        }
-                        else if (op == "Sub")
-                        {
-                            result = leftValue - rightValue;
-                        }
-                        else if (op == "Mult")
-                        {
-                            result = leftValue * rightValue;
-                        }
-                        else if (op == "Div")
-                        {
-                            result = leftValue / rightValue;
-                        }
-                        else if (op == "Mod")
-                        {
-                            result = leftValue % rightValue;
-                        }
-
-                        value = result.ToString();
-                        variables[varName] = result;
-                    }
-                }
-            }
-        }
-
-        if (varName != null && value != null)
-        {
-            for (int i = 0; i < MemoryFrame.Count; i++)
-            {
-                if (MemoryFrame[i].StartsWith(varName + " ="))
-                {
-                    MemoryFrame[i] = $"{varName} | {value}";
-                    return;
-                }
-            }
-
+            string varName = kvp.Key;
+            string value = kvp.Value.ToString();
+            Debug.Log($"Updating {varName} to {value} for line {frame.Line}");
             MemoryFrame.Add($"{varName} | {value}");
         }
+
+            // Finally, update the display text
+            StringBuilder sb = new StringBuilder();
+        foreach (string line in MemoryFrame)
+        {
+            sb.AppendLine(line);
+        }
+        MemoryFrameText.text = sb.ToString();
     }
+
 
     public void Visualize(List<string> frame, Vector3 location)
     {
         Debug.Log("Visualize called");
         // Adjust the location to move the object a bit higher
-        location.x += 1.3f;
         location.y += 1.3f; // Adjust the y-coordinate to move the object higher
-        location.z += 0.6f;
+        location.z += -0.3f;
         StartCoroutine(AnimateMemoryFrame(frame, location));
     }
 

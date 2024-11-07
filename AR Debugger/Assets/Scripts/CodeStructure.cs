@@ -21,22 +21,10 @@ public class CodeStructure : MonoBehaviour
             return;
         }
 
-        // Place the beltObject in front of the headset and adjust its size and position
-        beltObject.transform.position = Headset.transform.position + Headset.transform.forward * 0.7f - new Vector3(0, 0.5f, 0);
-        beltObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f); // Adjust the scale to make it smaller
-        beltObject.transform.SetParent(Headset.transform);
-
         LineUp = new GameObject();
         LineUp.transform.SetParent(beltObject.transform); // Set the parent to 098-belt.
-
-        // Set the local position relative to the beltObject
-        LineUp.transform.localPosition = new Vector3(0, -0.6f, 0.1f); // Adjust the values as needed
+        LineUp.transform.position = Headset.transform.position + Headset.transform.forward * 0.1f - new Vector3(0, 0.6f, 0);
         Location = LineUp.transform.position;
-
-        Debug.Log($"Headset position: {Headset.transform.position}");
-        Debug.Log($"beltObject position: {beltObject.transform.position}");
-        Debug.Log($"LineUp local position: {LineUp.transform.localPosition}");
-        Debug.Log($"LineUp world position: {LineUp.transform.position}");
     }
 
     public void VisualizeSequence(string codeLine, Vector3 location)

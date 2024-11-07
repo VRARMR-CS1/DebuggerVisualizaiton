@@ -11,9 +11,9 @@ public class Traverser : MonoBehaviour
     public CodeMemory UserMemory;
 
     // Dictionary to store the locations of the lineups
-    private Dictionary<string, Vector3> lineupLocations = new Dictionary<string, Vector3>();
+    private Dictionary<int, Vector3> lineupLocations = new Dictionary<int, Vector3>(); // Changed to int key
 
-    public void Traverse(ASTNode node, List<string> pythonCode)
+    public void Traverse(ASTNode node, List<string> pythonCode, List<CodeFrame> frames)
     {
         if (node == null)
         {
@@ -39,11 +39,17 @@ public class Traverser : MonoBehaviour
             return;
         }
 
+        if (frames == null)
+        {
+            Debug.LogError("Frames list is null");
+            return;
+        }
+
         // First phase: Create all lineup objects
         CreateLineupObjects(node, pythonCode);
 
         // Second phase: Update and visualize memory
-        StartCoroutine(UpdateAndVisualizeMemory(node, pythonCode));
+        StartCoroutine(UpdateAndVisualizeMemory(frames, pythonCode));
     }
 
     private void CreateLineupObjects(ASTNode node, List<string> pythonCode)
@@ -68,8 +74,8 @@ public class Traverser : MonoBehaviour
                     UserStructure.VisualizeSequence(code, UserStructure.Location);
 
                     // Record the location of the lineup after creating it
-                    lineupLocations[code] = UserStructure.Location;
-                    Debug.Log($"Recording location for {code}: {UserStructure.Location}");
+                    lineupLocations[child.LineNumber.Value] = UserStructure.Location; // Use int key
+                    Debug.Log($"Recording location for line {child.LineNumber.Value}: {UserStructure.Location}");
 
                     // Log the updated location after creating the lineup object
                     Debug.Log($"Updated location after creating {code}: {UserStructure.Location}");
@@ -89,54 +95,39 @@ public class Traverser : MonoBehaviour
         }
     }
 
-    private IEnumerator UpdateAndVisualizeMemory(ASTNode node, List<string> pythonCode)
+    private IEnumerator UpdateAndVisualizeMemory(List<CodeFrame> frames, List<string> pythonCode)
     {
-        // Visit each node of the AST
-        foreach (ASTNode child in node.Body ?? new List<ASTNode>())
+        foreach (var frame in frames)
         {
-            if (child != null)
+            int line = frame.Line;
+            Debug.Log($"Processing frame for line: {line}");
+            if (line - 1 < pythonCode.Count)
             {
-                // Check if child is not null
-                if (child.Type == "If" || child.Type == "For" || child.Type == "While" || child.Type == "IfExp" || child.Type == "With" || child.Type == "Try")
+                string code = pythonCode[line - 1];
+                Debug.Log($"Animating memory for line: {line}");
+                // Animate the memory frame first
+                if (lineupLocations.TryGetValue(line, out Vector3 location))
                 {
-                    continue;
-                }
-
-                // Get the corresponding string from the Python Code list
-                if (child.LineNumber.HasValue && child.LineNumber.Value - 1 < pythonCode.Count)
-                {
-                    string code = pythonCode[child.LineNumber.Value - 1];
-
-                    // Update the memory frame and visualize it
-                    if (child.Type == "Assign" || child.Type == "AugAssign")
-                    {
-                        UserMemory.UpdateFrame(child);
-                        if (lineupLocations.TryGetValue(code, out Vector3 location))
-                        {
-                            Debug.Log($"Visualizing memory at location for {code}: {location}");
-                            UserMemory.Visualize(UserMemory.MemoryFrame, location);
-                        }
-                        else
-                        {
-                            Debug.LogError($"Location not found for code: {code}");
-                        }
-                    }
-
-                    // Wait for 2 seconds before processing the next node
-                    yield return new WaitForSeconds(2.0f);
+                    Debug.Log($"Visualizing memory at location for line {line}: {location}");
+                    UserMemory.Visualize(UserMemory.MemoryFrame, location);
                 }
                 else
                 {
-                    Debug.LogError("LineNumber is out of range: " + child.LineNumber);
+                    Debug.LogError($"Location not found for line: {line}");
                 }
+                // Wait for animation to complete
+                yield return new WaitForSeconds(2.0f);
 
-                // Recursively traverse the child nodes
-                yield return StartCoroutine(UpdateAndVisualizeMemory(child, pythonCode));
+                // Update the memory frame after the animation
+                Debug.Log($"Updating memory for line: {line}");
+                UserMemory.UpdateFrameFromJson(frame);
             }
             else
             {
-                Debug.LogError("child is null");
+                Debug.LogError("Line number is out of range: " + line);
             }
         }
     }
+
+
 }
